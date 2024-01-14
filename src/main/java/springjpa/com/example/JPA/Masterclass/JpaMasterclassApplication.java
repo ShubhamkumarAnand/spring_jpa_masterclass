@@ -1,11 +1,10 @@
 package springjpa.com.example.JPA.Masterclass;
 
+import com.github.javafaker.Faker;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-
-import java.util.List;
 
 @SpringBootApplication
 public class JpaMasterclassApplication {
@@ -17,20 +16,14 @@ public class JpaMasterclassApplication {
 	@Bean
 	CommandLineRunner commandLineRunner(StudentRepository studentRepository) {
 		return args -> {
-			Student maria = new Student("maria", "jon", "maria@spring.edu", 24);
-			Student ram = new Student("ram", "chandra", "ram@ramayan.com", 21);
-			Student ramS = new Student("ram", "chandra", "ramsharma@ramayan.com", 25);
-			studentRepository.saveAll(List.of(maria, ram, ramS));
-			studentRepository
-					.findStudentByEmail("ram@ramayan.com")
-					.ifPresentOrElse(System.out::println,
-							() -> System.out.println("Student with given email not found"));
-
-			studentRepository.findStudentByFirstNameAndAgeIsGreaterThanEqual("ram", 21).forEach(System.out::println);
-
-			studentRepository.findStudentByFirstNameAndAgeIsGreaterThanEqualNative("ram", 21).forEach(System.out::println);
-
-			System.out.println(studentRepository.deleteStudentById(1L));
+			Faker faker = new Faker();
+			for (int i = 0; i <= 20; i++) {
+				String firstName = faker.name().firstName();
+				String lastName = faker.name().lastName();
+				String email = String.format("%s.%s@imskanand.code", firstName, lastName);
+				Student student = new Student(firstName, lastName, email, faker.number().numberBetween(17, 45));
+				studentRepository.save(student);
+			}
 		};
 	}
 }
