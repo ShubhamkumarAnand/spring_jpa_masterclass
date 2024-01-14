@@ -29,6 +29,8 @@ public class JpaMasterclassApplication {
 			studentRepository.findStudentByFirstNameAndAgeIsGreaterThanEqual("ram", 21).forEach(System.out::println);
 
 			studentRepository.findStudentByFirstNameAndAgeIsGreaterThanEqualNative("ram", 21).forEach(System.out::println);
+
+			System.out.println(studentRepository.deleteStudentById(1L));
 		};
 	}
 }
