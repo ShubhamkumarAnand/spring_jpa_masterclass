@@ -27,6 +27,8 @@ public class JpaMasterclassApplication {
 							() -> System.out.println("Student with given email not found"));
 
 			studentRepository.findStudentByFirstNameAndAgeIsGreaterThanEqual("ram", 21).forEach(System.out::println);
+
+			studentRepository.findStudentByFirstNameAndAgeIsGreaterThanEqualNative("ram", 21).forEach(System.out::println);
 		};
 	}
 }
