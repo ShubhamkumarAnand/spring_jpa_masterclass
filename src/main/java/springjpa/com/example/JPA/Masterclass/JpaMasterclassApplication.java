@@ -19,26 +19,14 @@ public class JpaMasterclassApplication {
 		return args -> {
 			Student maria = new Student("maria", "jon", "maria@spring.edu", 24);
 			Student ram = new Student("ram", "chandra", "ram@ramayan.com", 21);
-			studentRepository.saveAll(List.of(maria, ram));
-			System.out.println(studentRepository.count());
-
+			Student ramS = new Student("ram", "chandra", "ramsharma@ramayan.com", 25);
+			studentRepository.saveAll(List.of(maria, ram, ramS));
 			studentRepository
-					.findById(2L)
-					.ifPresentOrElse(
-							System.out::println,
-							() -> System.out.println("Student with id = 2 not Found"));
+					.findStudentByEmail("ram@ramayan.com")
+					.ifPresentOrElse(System.out::println,
+							() -> System.out.println("Student with given email not found"));
 
-			studentRepository
-					.findById(3L)
-					.ifPresentOrElse(
-							System.out::println,
-							() -> System.out.println("Student with id = 3 not Found"));
-
-			List<Student> students = studentRepository.findAll();
-			students.forEach(System.out::println);
-
-			studentRepository.deleteById(1L);
-			System.out.println(studentRepository.count());
+			studentRepository.findStudentByFirstNameAndAgeIsGreaterThanEqual("ram", 21).forEach(System.out::println);
 		};
 	}
 }
