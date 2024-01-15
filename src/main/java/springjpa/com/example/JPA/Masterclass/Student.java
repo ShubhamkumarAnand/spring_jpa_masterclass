@@ -50,9 +50,28 @@ public class Student {
     @OneToOne(
             mappedBy = "student",
             orphanRemoval = true,
-            cascade = {CascadeType.PERSIST, CascadeType.REMOVE}
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.REMOVE
+            }
     )
     private StudentIdCard studentIdCard;
+
+    @ManyToMany(
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE}
+    )
+    @JoinTable(
+            name = "enrollment",
+            joinColumns = @JoinColumn(
+                    name = "student_id",
+                    foreignKey = @ForeignKey(name = "enrollment_student_id_fk")
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name = "courese_id",
+                    foreignKey = @ForeignKey(name = "enrollment_course_id_fk")
+            )
+    )
+    private List<Course> courses = new ArrayList<>();
 
     @OneToMany(
             mappedBy = "student",
@@ -140,6 +159,20 @@ public class Student {
 
     public List<Book> getBooks() {
         return books;
+    }
+
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public void enrollToCourse(Course course){
+        courses.add(course);
+        course.getStudents().add(this);
+    }
+
+    public void unEnrollCourse(Course course){
+        courses.remove(course);
+        course.getStudents().remove(this);
     }
 
     @Override

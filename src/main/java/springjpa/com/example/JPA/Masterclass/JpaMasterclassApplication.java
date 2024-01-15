@@ -20,8 +20,7 @@ public class JpaMasterclassApplication {
 	}
 
 	@Bean
-	CommandLineRunner commandLineRunner(StudentRepository studentRepository,
-										StudentIdCardRepository studentIdCardRepository) {
+	CommandLineRunner commandLineRunner(StudentRepository studentRepository) {
 		return args -> {
 			Student student = generateOneStudent(studentRepository);
 			student.addBook(
@@ -44,6 +43,11 @@ public class JpaMasterclassApplication {
 			);
 			StudentIdCard  studentIdCard = new StudentIdCard(student, "1234567");
 			student.setStudentIdCard(studentIdCard);
+			student.enrollToCourse(new Course(
+					"computer science", "CSE"
+			));student.enrollToCourse(new Course(
+					"Entrepreneurship", "Business Dev"
+			));
 			studentRepository.save(student);
 			studentRepository.findById(1L).ifPresent(s -> {
 				System.out.println("Find book lazy...");
