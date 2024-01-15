@@ -43,7 +43,8 @@ public class JpaMasterclassApplication {
 					)
 			);
 			StudentIdCard  studentIdCard = new StudentIdCard(student, "1234567");
-			studentIdCardRepository.save(studentIdCard);
+			student.setStudentIdCard(studentIdCard);
+			studentRepository.save(student);
 			studentRepository.findById(1L).ifPresent(s -> {
 				System.out.println("Find book lazy...");
 				List<Book> books = student.getBooks();
