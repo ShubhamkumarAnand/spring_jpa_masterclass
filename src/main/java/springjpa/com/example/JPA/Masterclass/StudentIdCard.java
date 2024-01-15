@@ -24,12 +24,16 @@ public class StudentIdCard {
     private long id;
 
     @OneToOne(
-            cascade = CascadeType.ALL
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
 //            fetch = FetchType.LAZY
     )
     @JoinColumn(
             name = "student_id",
-            referencedColumnName = "id"
+            referencedColumnName = "id",
+            foreignKey = @ForeignKey(
+                    name = "student_id_fk"
+            )
     )
     private Student student;
     @Column(
