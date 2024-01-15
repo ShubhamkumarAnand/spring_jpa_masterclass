@@ -23,7 +23,10 @@ public class StudentIdCard {
     )
     private long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(
+            cascade = CascadeType.ALL
+//            fetch = FetchType.LAZY
+    )
     @JoinColumn(
             name = "student_id",
             referencedColumnName = "id"
@@ -54,5 +57,14 @@ public class StudentIdCard {
     }
 
     public StudentIdCard() {
+    }
+
+    @Override
+    public String toString() {
+        return "StudentIdCard{" +
+                "id=" + id +
+                ", student=" + student +
+                ", cardNumber='" + cardNumber + '\'' +
+                '}';
     }
 }
