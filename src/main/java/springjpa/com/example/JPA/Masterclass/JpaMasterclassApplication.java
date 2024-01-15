@@ -23,6 +23,7 @@ public class JpaMasterclassApplication {
 			Student student = generateOneStudent(studentRepository);
 			StudentIdCard  studentIdCard = new StudentIdCard(student, "1234567");
 			studentIdCardRepository.save(studentIdCard);
+			studentRepository.findById(1L).ifPresent(System.out::println);
 			studentIdCardRepository.findById(1L).ifPresent(System.out::println);
 		};
 	}
