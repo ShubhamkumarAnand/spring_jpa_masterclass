@@ -50,8 +50,8 @@ public class Book {
     private LocalDateTime createdAt;
 
 
-    public Book(Student student, LocalDateTime createdAt) {
-        this.student = student;
+    public Book(String bookName, LocalDateTime createdAt) {
+        this.bookName = bookName;
         this.createdAt = createdAt;
     }
 

@@ -9,6 +9,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @SpringBootApplication
 public class JpaMasterclassApplication {
 
@@ -21,11 +24,35 @@ public class JpaMasterclassApplication {
 										StudentIdCardRepository studentIdCardRepository) {
 		return args -> {
 			Student student = generateOneStudent(studentRepository);
+			student.addBook(
+					new Book(
+							"computer science",
+							LocalDateTime.now().minusDays(4)
+					)
+			);
+			student.addBook(
+					new Book(
+							"lean startup",
+							LocalDateTime.now()
+					)
+			);
+			student.addBook(
+					new Book(
+							"Vivek Ramasawmy",
+							LocalDateTime.now().minusYears(1)
+					)
+			);
 			StudentIdCard  studentIdCard = new StudentIdCard(student, "1234567");
 			studentIdCardRepository.save(studentIdCard);
-			studentRepository.findById(1L).ifPresent(System.out::println);
-			studentIdCardRepository.findById(1L).ifPresent(System.out::println);
-			studentRepository.deleteById(1L);
+			studentRepository.findById(1L).ifPresent(s -> {
+				System.out.println("Find book lazy...");
+				List<Book> books = student.getBooks();
+				books.forEach(book -> {
+					System.out.println(s.getFirstName() + " borrowed " + book.getBookName());
+				});
+			});
+//			studentIdCardRepository.findById(1L).ifPresent(System.out::println);
+//			studentRepository.deleteById(1L);
 		};
 	}
 

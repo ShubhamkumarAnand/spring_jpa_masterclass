@@ -1,6 +1,9 @@
 package springjpa.com.example.JPA.Masterclass;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
 @Entity(name = "Student")
@@ -49,6 +52,17 @@ public class Student {
             orphanRemoval = true
     )
     private StudentIdCard studentIdCard;
+
+    @OneToMany(
+            mappedBy = "student",
+            orphanRemoval = true,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.REMOVE
+            },
+            fetch = FetchType.EAGER
+    )
+    private List<Book> books = new ArrayList<>();
 
     public Student(
             String firstName,
@@ -103,6 +117,24 @@ public class Student {
 
     public void setAge(Integer age) {
         this.age = age;
+    }
+
+    public void addBook(Book book) {
+        if (!this.books.contains(book)) {
+            this.books.add(book);
+            book.setStudent(this);
+        }
+    }
+
+    public void removeBook(Book book) {
+        if (this.books.contains(book)) {
+            this.books.remove(book);
+            book.setStudent(null);
+        }
+    }
+
+    public List<Book> getBooks() {
+        return books;
     }
 
     @Override
