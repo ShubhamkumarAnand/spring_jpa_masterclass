@@ -17,21 +17,31 @@ public class JpaMasterclassApplication {
 	}
 
 	@Bean
-	CommandLineRunner commandLineRunner(StudentRepository studentRepository) {
+	CommandLineRunner commandLineRunner(StudentRepository studentRepository,
+										StudentIdCardRepository studentIdCardRepository) {
 		return args -> {
-			generateRandomStudents(studentRepository);
-//			getStudentDataSortedByFirstNameAndAge(studentRepository);
-
-			PageRequest pageRequest = PageRequest.of(
-					0,
-					5,
-					Sort.by("firstName").ascending());
-			Page<Student> page = studentRepository.findAll(pageRequest);
-			System.out.println(page);
+			Student student = generateOneStudent(studentRepository);
+			StudentIdCard  studentIdCard = new StudentIdCard(student, "1234567");
+			studentIdCardRepository.save(studentIdCard);
 		};
 	}
 
-	private static void getStudentDataSortedByFirstNameAndAge(StudentRepository studentRepository) {
+	private static Student generateOneStudent(StudentRepository studentRepository) {
+		Faker faker = new Faker();
+		String firstName = faker.name().firstName();
+		String lastName = faker.name().lastName();
+		String email = String.format("%s.%s@imskanand.code", firstName, lastName);
+        //		studentRepository.save(student);
+		return new Student(firstName, lastName, email, faker.number().numberBetween(17, 45));
+	}
+
+	private static void paginateAndSortStudentDataByFirstName(StudentRepository studentRepository) {
+		PageRequest pageRequest = PageRequest.of(0, 5, Sort.by("firstName").ascending());
+		Page<Student> page = studentRepository.findAll(pageRequest);
+		System.out.println(page);
+	}
+
+	private static void sortStudentDataByFirstNameAndAge(StudentRepository studentRepository) {
 		Sort sort = Sort.by("firstName").ascending()
 				.and(Sort.by("age").descending());
 		studentRepository
